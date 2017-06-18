@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+      <script  src="js/knockout-3.4.2.js"></script>
+  </head>
+  <body>
+    <ul class="locationsList" data-bind="foreach: ob">
+      <li><button data-bind="text: title"></button></li>
+
+    </ul>
+  <script>
+  var locations = [{
+          title: "Plaza de España, Sevilla, España",
+          lat: 37.377200,
+          lng: -5.986905
+
+      },
+      {
+          title: "Plaza América, Sevilla, España",
+          lat: 37.3716488,
+          lng: -5.98706
+
+      },
+      {
+          title: "Acuario, Sevilla, España",
+
+          lat: 37.370565,
+          lng: -5.991229
+      }
+
+      // {title: , location: {lat: , lng: },
+      // {title: , location: {lat: , lng: }
+  ];
+    var ViewModel = function(){
+      var ob= ko.observableArray(locations)
+
+    };
+    ko.applyBindings(new ViewModel());
+  </script>
+  </body>
+</html>
