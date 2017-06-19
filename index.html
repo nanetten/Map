@@ -14,12 +14,13 @@
   <div id="main" >
     <div id="menu">
       <ul class="locationsList" data-bind="foreach: ob">
-        <li><button data-bind="text: title"></button></li>
-
+        <li><button data-bind="text: title, click: $parent.listMarkerAppear(marker, $parent.info, $parent.map)"></button></li>
+        <!--  -->
       </ul>
     </div>
     <div id="map"></div>
   </div>
+
   <script  async src="js/app.js"></script>
   <script async defer
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH38wbMpVyYk37C9kTRKEg3lK0mg_5gFU&v=3&callback=initMap">

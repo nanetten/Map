@@ -11,16 +11,24 @@ html, body {
   width: 20%;
   height: auto;
   background-color: white;
+
 }
 #map {
   height: 100%;
   width: 80%;
 }
+.locationsList {
+  padding:0;
+}
 li {
   list-style-type: none;
+
+
 }
 button {
-  margin-bottom:  16px;
+  margin-bottom:  20px;
+  width: 100%;
+
 }
 #main {
 

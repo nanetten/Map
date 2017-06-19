@@ -13,99 +13,89 @@ var locations = [{
     },
     {
         title: "Acuario, Sevilla, España",
-
         lat: 37.370565,
         lng: -5.991229
     }
-
+    // Add two more
     // {title: , location: {lat: , lng: },
     // {title: , location: {lat: , lng: }
 ];
 
 // Global variables
 var map;
-var markers = [];
-var marker = function(title, lat, lng, map, info, bounds){
-  var self = this;
-  this.title = title;
-  this.lat = lat;
-  this.lng = lng;
-  this.position =  {lat: this.lat, lng: this.lng};
 
-  this.marker = new google.maps.Marker({
-              position: self.position,
-              map: map,
-              title: self.title,
-              animation: google.maps.Animation.DROP,
-          });
-  bounds.extend(self.position);
-  self.marker.addListener("click", function() {
-    populateInfoWindow(self.marker, info);
-  });
-  markers.push(self.marker);
+var marker = function(title, lat, lng, map, info, bounds) { // Marker constructor
+    var self = this;
+    this.title = title;
+    this.lat = lat;
+    this.lng = lng;
+    this.position = {
+        lat: this.lat,
+        lng: this.lng
+    };
 
+    this.marker = new google.maps.Marker({
+        position: self.position,
+        map: map,
+        title: self.title,
+        animation: google.maps.Animation.DROP,
+    });
+    bounds.extend(self.position); // Extends map boundaries by the marker position
+    self.marker.addListener("click", function() {
+        populateInfoWindow(self.marker, info, map);
+    });
 }
 
-function appendList(title, id) {
-    $(".locationsList").append('<li><button id="' + id + '"data-bind="click: listMarkerAppear">' + title + '</button></li>');
+
+function populateInfoWindow(marker, infowindow, map) {
+    if (!$('.' + marker.title).length) {
+        console.log("current marker infowindow = ", infowindow);
+        infowindow.marker = marker;
+        infowindow.setContent('<div class="' + marker.title + '">' + marker.title + '</div>');
+
+        infowindow.open(map, marker);
+        infowindow.addListener("closeclick", function() {
+            infowindow.setContent(null);
+            infowindow.close();
+        });
+    }
 }
 
-function populateInfoWindow(marker, infowindow) {
+var ViewModel = function() {
+    var self = this;
+    self.map = new google.maps.Map(document.getElementById("map"), {
+        center: {
+            lat: 37.389092,
+            lng: -5.984459
+        },
+        zoom: 15
+    });
 
+    self.ob = ko.observableArray(locations);
+    self.info = new google.maps.InfoWindow(); // Info Window for selected marker
+    self.listMarkerAppear = function(marker, infowindow, map) {
 
-
-          if (!$('.'+marker.title).length){
-
-              console.log("current marker infowindow = ", infowindow);
-              infowindow.marker = marker;
-              infowindow.setContent('<div class="' +marker.title+ '">' + marker.title + '</div>');
-              infowindow.open(map, marker);
-              infowindow.addListener("closeclick", function() {
-                  infowindow.setContent(null);
-                  infowindow.close();
-
-              });
-
-          }
-
-}
-
-var ViewModel = function () {
-  map = new google.maps.Map(document.getElementById("map"), {
-      center: {
-          lat: 37.389092,
-          lng: -5.984459
-      },
-      zoom: 15
-  });
-    this.ob = ko.observableArray(locations);
-
-    info = new google.maps.InfoWindow(); // Info Window for selected marker
-    this.listMarkerAppear = function(locations, event){
-      populateInfoWindow(markers[event.target.id], info);
+        if (!$('.' + marker.title).length) {
+            console.log("current marker infowindow = ", infowindow);
+            infowindow.marker = marker;
+            infowindow.setContent('<div class="' + marker.title + '">' + marker.title + '</div>');
+            console.log("map detected=", map);
+            console.log("marker detected=", marker.title);
+            infowindow.open(map, marker); // This line breaks the code
+            // infowindow.addListener("closeclick", function() {
+            //     infowindow.setContent(null);
+            //     infowindow.close();
+            // });
+        }
     }
     var bounds = new google.maps.LatLngBounds(); // Get current bounds of the map
-    for (var i = 0; i < locations.length; i++){
-      locations[i].maker = new marker(locations[i].title, locations[i].lat, locations[i].lng, map, info, bounds); // Use this with knockout
-      // appendList(locations[i].title, i);
+    for (var i = 0; i < locations.length; i++) {
+        locations[i].marker = new marker(locations[i].title, locations[i].lat, locations[i].lng, self.map, self.info, bounds); // Loop to initiate each marker, it's saved on locations.
     }
-    map.fitBounds(bounds); // Fits map to markers bound
 
-
-
-
-
-
-
+    self.map.fitBounds(bounds); // Fits map to markers bound
 };
 
-
-
 function initMap() {
-
-
-
     ko.applyBindings(new ViewModel());
-
-
 }

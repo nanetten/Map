@@ -7,25 +7,27 @@
   </head>
   <body>
     <ul class="locationsList" data-bind="foreach: ob">
-      <li><button data-bind="text: title"></button></li>
+      <li><button data-bind="text: title, click: $parent.dataTest(marker)">TEST</button></li>
 
     </ul>
   <script>
   var locations = [{
           title: "Plaza de España, Sevilla, España",
+          marker: "FIRST",
           lat: 37.377200,
           lng: -5.986905
 
       },
       {
           title: "Plaza América, Sevilla, España",
+          marker: "SECOND",
           lat: 37.3716488,
           lng: -5.98706
 
       },
       {
           title: "Acuario, Sevilla, España",
-
+          marker: "THIRD",
           lat: 37.370565,
           lng: -5.991229
       }
@@ -34,10 +36,14 @@
       // {title: , location: {lat: , lng: }
   ];
     var ViewModel = function(){
-      var ob= ko.observableArray(locations)
-
+      var self = this;
+      self.ob = ko.observableArray(locations)
+      self.dataTest = function(marker) {
+        console.log(marker);
+      }
     };
-    ko.applyBindings(new ViewModel());
+    var v = new ViewModel();
+    ko.applyBindings(v);
   </script>
   </body>
 </html>
