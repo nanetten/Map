@@ -1,51 +1,50 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <meta charset="utf-8">
-      <!-- <meta name="viewport" content="initial-scale=1"/> -->
-      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-      <title>Map</title>
-      <script  src="js/knockout-3.4.2.js"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      <link rel="stylesheet" type="text/css" href="css/style.css">
-      <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-      <link href="https://fonts.googleapis.com/css?family=Hind+Siliguri|Niconne" rel="stylesheet">
 
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <title>Map</title>
+    <script src="js/knockout-3.4.2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Hind+Siliguri|Niconne" rel="stylesheet">
+    <style>
+    #app,.menu{height:100%}.filterInput,.listElement,.showList{text-align:center}*{box-sizing:border-box;font-family:'Hind Siliguri',sans-serif;font-size:16px}#map,body,html{height:100vh;width:100%;z-index:0;position:absolute;margin:0}.wrapper{display:inline-block;min-width:280px;width:20%;background-color:rgba(203,230,163,.65);border:2px solid #698243;z-index:1;position:absolute;overflow-y:auto;margin-top:40px}.menu,.nav{position:relative}.menu{width:100%}.locationsList{width:100%;padding:0;margin:0 auto}li{list-style-type:none}.listElement :hover{background-color:#94DC19}.listElement{display:inline-block;padding-top:20px;width:100%;cursor:pointer}#app,.nav{width:100%;display:flex}h2{margin:0;font-size:16.5px}.buttonList{margin-bottom:20px;width:100%}#app{background-color:#E0E0E0;flex-wrap:wrap}.nav,.showList{background-color:#83D353;z-index:1}p{margin:2.5px 0 0;font-size:14px}.nav{height:40px;padding:0;margin:0;flex-wrap:wrap}.navTittle{font-family:Niconne,cursive;font-size:2.5em;position:absolute;margin:0;right:10px;top:-5px}.showList{display:inline-block;padding-top:10px;width:275px;height:100%;cursor:pointer;margin-top:0}#filter{width:20%;height:100%;position:relative;margin-left:0;min-width:280px}.dropImage,.markerPhoto,.markerWindow{margin:0 auto}.filterInput{width:100%;height:100%;z-index:1;border:none}.search{display:block;position:absolute;cursor:pointer;top:calc(50% - 8px);left:calc(95% - 15px)}.filterButton{width:20%;height:100%;background-color:#005ed1;border:none}.dropImageParent,.reload{cursor:pointer;height:40px}.dropImage{width:40px;display:block;z-index:1}.dropImageParent{width:20%;min-width:280px;background-color:#83D353;z-index:1;position:relative}.reload{width:50px}.markerPhoto{max-width:175px;max-height:150px;display:block}@media screen and (max-width:768px){.wrapper{height:100%;max-height:250px}.navTittle{display:none}.reload{width:10%}#filter,.dropImageParent,.wrapper{min-width:0;width:45%}}
+    </style>
+</head>
 
-   </head>
-   <body>
-      <div id="app" >
-         <div id="map"></div>
-         <div class="nav">
-           <div class="dropImageParent" data-bind="click: function(){menuSlide()}">
-           <img class="dropImage" src="arrows.png" alt="menuArrows" >
+<body>
+    <div id="app">
+        <div id="map"></div>
+        <div class="nav">
+            <div class="dropImageParent" data-bind="click: function(){menuSlide()}">
+                <img class="dropImage" src="images/arrows.png" alt="menuArrows">
             </div>
-           <div id="filter">
-
-              <input type="text" name="filterList" placeholder="Search..." class="filterInput" data-bind="textInput: observableInput, event: { keyup:onEnter }">
-              <i class="fa fa-search fa-3 search" aria-hidden="true" data-bind="click: function() {filterDivs()}"></i>
-
-           </div>
-
-           <img src="reload.svg" data-bind="click: function(){reload()}" class="reload"></i>
-           <h1 class="navTittle"> Cool places in Sevilla </h1>
-         </div>
-         <div class="wrapper" data-bind="visible: isMenuOpen">
-
-           <div class="menu">
-               <ul class="locationsList" data-bind="foreach: observableLocations">
-                  <div class="listElement" data-bind="visible: place.check, click: function() {$parent.listMarkerAppear(place, $parent.info, $parent.map)}">
-                     <li>
-                        <h2><strong data-bind="text: title"></strong></h2>
-                        <p data-bind="text: address"> </p>
-                        <p data-bind="text: city"> </p>
-                     </li>
-                  </div>
-               </ul>
+            <div id="filter">
+                <input type="text" name="filterList" placeholder="Search..." class="filterInput" data-bind="textInput: observableInput, event: { keyup:onEnter }">
+                <i class="fa fa-search fa-3 search" aria-hidden="true" data-bind="click: function() {filterDivs()}"></i>
             </div>
-         </div>
-      </div>
-      <script  async src="js/app.js"></script>
-      <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCH38wbMpVyYk37C9kTRKEg3lK0mg_5gFU&v=3&callback=initMap" onerror="googleMapsError()"></script>
-   </body>
+            <img src="images/reload.svg" data-bind="click: function(){reload()}" class="reload">
+            </i>
+            <h1 class="navTittle"> Cool places in Sevilla </h1>
+        </div>
+        <div class="wrapper" data-bind="visible: isMenuOpen">
+            <div class="menu">
+                <ul class="locationsList" data-bind="foreach: observableLocations">
+                    <div class="listElement" data-bind="visible: place.check, click: function() {$parent.listMarkerAppear(place, $parent.info, $parent.map)}">
+                        <li>
+                            <h2><strong data-bind="text: title"></strong></h2>
+                            <p data-bind="text: address"> </p>
+                            <p data-bind="text: city"> </p>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script async src="js/app.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCH38wbMpVyYk37C9kTRKEg3lK0mg_5gFU&v=3&callback=initMap" onerror="googleMapsError()"></script>
+</body>
+
 </html>
