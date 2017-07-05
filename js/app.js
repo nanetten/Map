@@ -29,9 +29,9 @@ var locations = [{
         lng: -5.9902257
     },
     {
-        title: 'Museo Arqueológico de Sevilla',
-        address: 'Plaza América, s/n',
-        city: '41013 Sevilla',
+        title: "Museo Arqueológico de Sevilla",
+        address: "Plaza América, s/n",
+        city: "41013 Sevilla",
         lat: 37.370905,
         lng: -5.987100
     }
@@ -65,7 +65,7 @@ var place = function(title, lat, lng, address, city, map, info, bounds) { // Mar
         populateInfoWindow(self.marker, info, map, locations);
         zoom(self.marker, map);
     });
-}
+};
 
 var lastMarker;
 var flickrUrl;
@@ -89,7 +89,7 @@ function populateInfoWindow(marker, infowindow, map, locations) {
             photo_id = data.photos.photo[q].id;
             secret = data.photos.photo[q].secret;
             photoUrl = 'https://farm' + farm_id + '.staticflickr.com/' + server_id + '/' + photo_id + '_' + secret + '.jpg';
-            if (lastMarker != undefined && lastMarker != marker) {
+            if (lastMarker !== undefined && lastMarker != marker) {
                 lastMarker.setAnimation(null); // Changes the last marker to default animation
                 lastMarker.setIcon('http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png'); // Changes the last marker to default icon
             }
@@ -109,7 +109,7 @@ function populateInfoWindow(marker, infowindow, map, locations) {
         error: function() {
             alert('[Please reload or try again later...] Flickr api failed to load, reverting back to default.');
             // window.alert = function() {};
-            if (lastMarker != undefined && lastMarker != marker) {
+            if (lastMarker !== undefined && lastMarker != marker) {
                 lastMarker.setAnimation(null); // Changes the last marker to default animation
                 lastMarker.setIcon('http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png'); // Changes the last marker to default icon
             }
@@ -143,17 +143,17 @@ var ViewModel = function() {
     self.menuSlide = function() { // Handles opening/closing menu
         var menuCheck = self.isMenuOpen();
         self.isMenuOpen(false);
-        if (menuCheck == true) {
+        if (menuCheck === true) {
             self.isMenuOpen(false);
         } else {
             self.isMenuOpen(true);
         }
-    }
+    };
 
     self.listMarkerAppear = function(place, infowindow, map) { // Handles functionality of marker list on menu
         populateInfoWindow(place.marker, infowindow, map, locations);
         zoom(place.marker, map);
-    }
+    };
 
     self.filterDivs = function() { // This.. you got it right, it filter divs(from the menu)
         var observer = self.observableLocations();
@@ -170,16 +170,16 @@ var ViewModel = function() {
                 observer[i].place.check(true);
             }
         }
-    }
+    };
     self.onEnter = function() { // To use enter in the filter input
         if (event.keyCode == 13) {
             self.filterDivs();
         }
-    }
+    };
 
     self.reload = function() { // Reloads app
         location.reload();
-    }
+    };
 
     self.styles = [{ // Styles for google maps
             elementType: 'labels.text.stroke',
