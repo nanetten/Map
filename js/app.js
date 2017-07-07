@@ -75,7 +75,6 @@ var server_id;
 var photo_id;
 var secret;
 var photoUrl;
-var q = 1;
 var key = '77943fb46dee2981cd17dd7d4a7533c9'; // flickr key
 
 function defaultInfoWindow(marker, infowindow, map, locations, spin) {
@@ -87,7 +86,7 @@ function defaultInfoWindow(marker, infowindow, map, locations, spin) {
     marker.setIcon('https://mt.google.com/vt/icon?psize=30&font=fonts/arialuni_t.ttf&color=ff304C13&name=icons/spotlight/spotlight-waypoint-a.png&ax=43&ay=48&text=%E2%80%A2'); // Sets current marker to green icon
     marker.setAnimation(google.maps.Animation.BOUNCE);
     infowindow.marker = marker;
-    if (spin == false) {
+    if (spin === false) {
         infowindow.setContent('<div class="markerWindow"><div class="infoWindow">' +
             '<strong class="title">' + marker.title + '</strong>' + '<p>' + marker.address + '<br>' + marker.city + '</p></div></div>');
     } else {
