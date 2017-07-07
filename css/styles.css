@@ -1,4 +1,4 @@
-#app,
+main,
 .menu {
     height: 100%
 }
@@ -38,7 +38,7 @@ html {
 }
 
 .menu,
-.nav {
+nav {
     position: relative
 }
 
@@ -67,8 +67,8 @@ li {
     cursor: pointer
 }
 
-#app,
-.nav {
+main,
+nav {
     width: 100%;
     display: flex
 }
@@ -83,12 +83,12 @@ h2 {
     width: 100%
 }
 
-#app {
+main {
     background-color: #E0E0E0;
     flex-wrap: wrap
 }
 
-.nav,
+nav,
 .showList {
     background-color: #83D353;
     z-index: 1
@@ -99,7 +99,7 @@ p {
     font-size: 14px
 }
 
-.nav {
+nav {
     height: 40px;
     padding: 0;
     margin: 0;
