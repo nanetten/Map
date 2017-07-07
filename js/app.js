@@ -104,8 +104,6 @@ function defaultInfoWindow(marker, infowindow, map, locations, spin) {
 }
 
 function ajaxSuccess(marker, infowindow, map, locations, data) {
-    console.log(data, marker, infowindow, map, locations);
-    var parent = $(".markerWindow");
     farm_id = data.photos.photo[1].farm;
     server_id = data.photos.photo[1].server;
     photo_id = data.photos.photo[1].id;
@@ -138,8 +136,6 @@ function populateInfoWindow(marker, infowindow, map, locations) {
             jsonp: 'jsoncallback'
         });
     }
-
-
 }
 
 function zoom(marker, map) {
