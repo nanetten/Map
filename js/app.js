@@ -58,7 +58,7 @@ var Place = function(title, lat, lng, address, city, map, info, bounds) { // Mar
         title: self.title,
         animation: google.maps.Animation.DROP,
         address: self.address,
-        city: self.city
+        city: self.city,
     });
     bounds.extend(self.position); // Extends map boundaries by the marker position
     self.marker.addListener("click", function() {
@@ -75,66 +75,67 @@ var server_id;
 var photo_id;
 var secret;
 var photoUrl;
+var q = 1;
 var key = '77943fb46dee2981cd17dd7d4a7533c9'; // flickr key
-
 function defaultInfoWindow(marker, infowindow, map, locations, spin) {
-    if (lastMarker !== undefined && lastMarker != marker) {
-        lastMarker.setAnimation(null); // Changes the last marker to default animation
-        lastMarker.setIcon('http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png'); // Changes the last marker to default icon
-    }
-    lastMarker = marker; // Replaced clunky loop that would slow down the app(big data) with this variable
-    marker.setIcon('https://mt.google.com/vt/icon?psize=30&font=fonts/arialuni_t.ttf&color=ff304C13&name=icons/spotlight/spotlight-waypoint-a.png&ax=43&ay=48&text=%E2%80%A2'); // Sets current marker to green icon
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-    infowindow.marker = marker;
-    if (spin === false) {
-        infowindow.setContent('<div class="markerWindow"><div class="infoWindow">' +
-            '<strong class="title">' + marker.title + '</strong>' + '<p>' + marker.address + '<br>' + marker.city + '</p></div></div>');
-    } else {
-        infowindow.setContent('<i class="fa fa-cog fa-spin fa-3x fa-fw margin-bottom spin"></i><div class="markerWindow"><div class="infoWindow">' +
-            '<strong class="title">' + marker.title + '</strong>' + '<p>' + marker.address + '<br>' + marker.city + '</p></div></div>');
-    }
-    infowindow.open(map, marker);
-    infowindow.addListener("closeclick", function() {
-        marker.setAnimation(null); // Changes the selected marker to default animation
-        infowindow.setContent(null);
-        infowindow.close();
-        marker.setIcon('http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png'); // Changes the selected marker to default icon
-    });
+  if (lastMarker !== undefined && lastMarker != marker) {
+      lastMarker.setAnimation(null); // Changes the last marker to default animation
+      lastMarker.setIcon('http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png'); // Changes the last marker to default icon
+  }
+  lastMarker = marker; // Replaced clunky loop that would slow down the app(big data) with this variable
+  marker.setIcon('https://mt.google.com/vt/icon?psize=30&font=fonts/arialuni_t.ttf&color=ff304C13&name=icons/spotlight/spotlight-waypoint-a.png&ax=43&ay=48&text=%E2%80%A2'); // Sets current marker to green icon
+  marker.setAnimation(google.maps.Animation.BOUNCE);
+  infowindow.marker = marker;
+  if (spin == true) {
+    infowindow.setContent('<div class="markerWindow"><div class="infoWindow">'
+    + '<strong class="title">' + marker.title + '</strong>' + '<p>' + marker.address + '<br>' + marker.city + '</p></div></div>');
+  } else {
+    infowindow.setContent('<i class="fa fa-cog fa-spin fa-3x fa-fw margin-bottom spin"></i><div class="markerWindow"><div class="infoWindow">'
+     + '<strong class="title">' + marker.title + '</strong>' + '<p>' + marker.address + '<br>' + marker.city + '</p></div></div>');
+  }
+  infowindow.open(map, marker);
+  infowindow.addListener("closeclick", function() {
+      marker.setAnimation(null); // Changes the selected marker to default animation
+      infowindow.setContent(null);
+      infowindow.close();
+      marker.setIcon('http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png'); // Changes the selected marker to default icon
+  });
 }
-
 function ajaxSuccess(marker, infowindow, map, locations, data) {
-    farm_id = data.photos.photo[1].farm;
-    server_id = data.photos.photo[1].server;
-    photo_id = data.photos.photo[1].id;
-    secret = data.photos.photo[1].secret;
-    photoUrl = 'https://farm' + farm_id + '.staticflickr.com/' + server_id + '/' + photo_id + '_' + secret + '.jpg';
-    $(".spin").replaceWith('<img class="markerPhoto" src="' + photoUrl + '">');
+  console.log(data, marker, infowindow, map, locations);
+  farm_id = data.photos.photo[1].farm;
+  server_id = data.photos.photo[1].server;
+  photo_id = data.photos.photo[1].id;
+  secret = data.photos.photo[1].secret;
+  photoUrl = 'https://farm' + farm_id + '.staticflickr.com/' + server_id + '/' + photo_id + '_' + secret + '.jpg';
+  infowindow.setContent('<div class="markerWindow"><img class="markerPhoto" src="' + photoUrl + '"><div class="infoWindow">'
+  + '<strong class="title">' + marker.title + '</strong>' + '<p>' + marker.address + '<br>' + marker.city + '</p></div></div>');
 }
-
 function ajaxFail(marker, infowindow, map, locations) {
-    alert('Flickr api failed to load, reverting back to default. [Please reload or try again later...] ');
-    window.alert = function() {};
-    defaultInfoWindow(marker, infowindow, map, locations, false);
+  alert('Flickr api failed to load, reverting back to default. [Please reload or try again later...] ');
+  window.alert = function() {};
+  defaultInfoWindow(marker, infowindow, map, locations, true);
 }
 
 function populateInfoWindow(marker, infowindow, map, locations) {
-    defaultInfoWindow(marker, infowindow, map, locations, true);
+    defaultInfoWindow(marker, infowindow, map, locations, false);
     flickrUrl = 'https://api.flickr.com/services/rest/?method=flickr.photos.search' + '&per_page=2&api_key=' + key + '&text=' + marker.title + '&lat=' + marker.lat + '&lon=' + marker.lng + '&format=json';
 
     $.when(ajaxRequest()).done(function(data) {
         ajaxSuccess(marker, infowindow, map, locations, data);
     });
     $.when(ajaxRequest()).fail(function(data) {
-        ajaxFail(marker, infowindow, map, locations);
+      ajaxFail(marker, infowindow, map, locations);
     });
-
     function ajaxRequest() {
-        return $.ajax({
-            url: flickrUrl,
-            dataType: 'jsonp',
-            jsonp: 'jsoncallback'
-        });
+      return $.ajax({
+          url: flickrUrl,
+          dataType: 'jsonp',
+          jsonp: 'jsoncallback'
+      });
     }
+
+
 }
 
 function zoom(marker, map) {
@@ -179,7 +180,6 @@ var ViewModel = function() {
             }
         }
     };
-
     self.onEnter = function() { // To use enter in the filter input
         if (event.keyCode == 13) {
             self.filterDivs();
@@ -190,41 +190,30 @@ var ViewModel = function() {
         location.reload();
     };
 
-    self.styles = [{ // Styles for google maps
-            elementType: 'labels.text.stroke',
-            stylers: [{
-                color: '#ffffff'
-            }]
-        },
-        {
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#000000'
-            }]
-        },
+    self.styles = [
         {
             featureType: 'landscape.man_made',
             stylers: [{
-                color: '#CBE6A3'
+                color: '#B3E5FC'
             }]
         },
         {
             featureType: 'poi.park',
             stylers: [{
-                color: '#f4eb97'
+                color: '#00695C'
             }]
         },
         {
             featureType: 'water',
             stylers: [{
-                color: '#FEEE54'
+                color: '#0B1C48'
             }]
         },
         {
             featureType: 'road',
             elementType: 'geometry',
             stylers: [{
-                color: '#83d353'
+                color: '#03A9F4'
             }]
         },
         {
@@ -233,7 +222,19 @@ var ViewModel = function() {
             stylers: [{
                 color: '#fff'
             }]
-        }
+        },
+        { // Styles for google maps
+                elementType: 'labels.text.stroke',
+                stylers: [{
+                    color: '#ffffff'
+                }]
+            },
+            {
+                elementType: 'labels.text.fill',
+                stylers: [{
+                    color: '#000000'
+                }]
+            },
     ];
 
     self.map = new google.maps.Map(document.getElementById("map"), { // Initiates google-maps Map
@@ -253,22 +254,13 @@ var ViewModel = function() {
     for (var i = 0; i < locations.length; i++) {
         locations[i].place = new Place(locations[i].title, locations[i].lat, locations[i].lng, locations[i].address, locations[i].city, self.map, self.info, bounds); // Loop to initiate each marker, it's saved on locations.
     }
-    google.maps.event.addDomListener(window, 'resize', function() {
-        self.map.fitBounds(bounds); // `bounds` is a `LatLngBounds` object
-    });
     self.map.fitBounds(bounds); // Fits map to markers bound
 };
-
-
 
 function googleMapsError() {
     alert('Google maps failed to load, please check that your connection is working or try again later...');
 }
 
 function initMap() {
-    var vm = new ViewModel();
-    ko.applyBindings(vm);
-    vm.observableInput.subscribe(function() {
-        vm.filterDivs();
-    });
+    ko.applyBindings(new ViewModel());
 }

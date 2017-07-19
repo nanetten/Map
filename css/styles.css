@@ -1,4 +1,4 @@
-main,
+#app,
 .menu {
     height: 100%
 }
@@ -29,8 +29,8 @@ html {
     display: inline-block;
     min-width: 280px;
     width: 20%;
-    background-color: rgba(203, 230, 163, .65);
-    border: 2px solid #698243;
+    background-color: rgba(179, 229, 252, .65);
+    border: 2px solid #03A9F4;
     z-index: 1;
     position: absolute;
     overflow-y: auto;
@@ -38,7 +38,7 @@ html {
 }
 
 .menu,
-nav {
+.nav {
     position: relative
 }
 
@@ -57,7 +57,7 @@ li {
 }
 
 .listElement :hover {
-    background-color: #94DC19
+    background-color: #4CAF50;
 }
 
 .listElement {
@@ -67,8 +67,8 @@ li {
     cursor: pointer
 }
 
-main,
-nav {
+#app,
+.nav {
     width: 100%;
     display: flex
 }
@@ -83,12 +83,12 @@ h2 {
     width: 100%
 }
 
-main {
+#app {
     background-color: #E0E0E0;
     flex-wrap: wrap
 }
 
-nav,
+.nav,
 .showList {
     background-color: #83D353;
     z-index: 1
@@ -99,11 +99,12 @@ p {
     font-size: 14px
 }
 
-nav {
+.nav {
     height: 40px;
     padding: 0;
     margin: 0;
-    flex-wrap: wrap
+    flex-wrap: wrap;
+    background-color: #03A9F4;
 }
 
 .navTittle {
@@ -175,7 +176,7 @@ nav {
 .dropImageParent {
     width: 20%;
     min-width: 280px;
-    background-color: #83D353;
+    background-color: #03A9F4;
     z-index: 1;
     position: relative
 }

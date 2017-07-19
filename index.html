@@ -11,19 +11,20 @@
 </head>
 
 <body>
-    <main>
-        <nav>
+    <div id="app">
+        <div id="map"></div>
+        <div class="nav">
             <div class="dropImageParent" data-bind="click: function(){menuSlide()}">
                 <img class="dropImage" src="images/arrows.png" alt="menuArrows">
             </div>
             <div id="filter">
-                <input type="text" name="filterList" placeholder="Search..." class="filterInput" data-bind="textInput: observableInput, valueUpdate: 'filterDivs', event: { keyup:onEnter }">
+                <input type="text" name="filterList" placeholder="Search..." class="filterInput" data-bind="textInput: observableInput, event: { keyup:onEnter }">
                 <i class="fa fa-search fa-3 search" aria-hidden="true" data-bind="click: function() {filterDivs()}"></i>
             </div>
             <img src="images/reload.svg" data-bind="click: function(){reload()}" class="reload">
             </i>
             <h1 class="navTittle"> Cool places in Sevilla </h1>
-        </nav>
+        </div>
         <div class="wrapper" data-bind="visible: isMenuOpen">
             <div class="menu">
                 <ul class="locationsList" data-bind="foreach: observableLocations">
@@ -37,13 +38,12 @@
                 </ul>
             </div>
         </div>
-        <div id="map"></div>
-    </main>
+    </div>
     <script src="js/knockout-3.4.2.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="js/app.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCH38wbMpVyYk37C9kTRKEg3lK0mg_5gFU&v=3&callback=initMap" onerror="googleMapsError()"></script>
-
+    
 </body>
 
 </html>
